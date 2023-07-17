@@ -1,0 +1,14 @@
+{
+    "name": "tinypico_git_check",
+    "stubs": {
+        "micropython-esp32-um-tinypico-stubs": "1.19.1.post7"
+    },
+    "dev-packages": {
+        "micropy-cli": "*"
+    },
+    "packages": {},
+    "config": {
+        "vscode": true,
+        "pylint": true
+    }
+}
