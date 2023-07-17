@@ -53,9 +53,7 @@ def do_connect(ssid: str, key: str):
     print(wlan.ifconfig())
 
 def get_latest_commit(user, token):
-    search_url = "https://api.github.com/search/repositories?q=user:{user}"
-    # search_url = "https://api.github.com/repos/twitter/bootstrap/branches"
-    # headers = {'Authorization': f'token {token}'}
+    search_url = "https://api.github.com/search/repositories?q=user:" + user
     headers = {"Authorization":"token {}".format(token),'User-Agent': 'My User Agent 1.0'}
     response = urequests.get(search_url, headers=headers)
     search_results = response.json()
