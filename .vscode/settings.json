@@ -12,5 +12,9 @@
     
 
     "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true
+    "python.linting.pylintEnabled": true,
+    "python.analysis.extraPaths": [
+        ".micropy/micropython_esp32_um_tinypico_stubs-1.19.1.post7",
+        ".micropy/tinypico_git_check"
+    ]
 }
