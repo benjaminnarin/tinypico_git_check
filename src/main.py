@@ -4,6 +4,7 @@ import tinypico as TinyPICO
 from dotstar import DotStar
 import time, random, micropython
 from network import WLAN, STA_IF, 
+import urequests 
 import json
 
 def load_config():
@@ -13,7 +14,8 @@ def load_config():
 			config = {
 				"ssid": data["network"]["ssid"],
                 "key": data["network"]["key"],
-                "token": data["token"]
+                "username": data["github"]["username"],
+                "token": data["github"]["token"]
             }
 			return config
 	except:
@@ -49,6 +51,42 @@ def do_connect(ssid: str, key: str):
         print("Already connected!")
     # get the interface's IP/netmask/gw/DNS addresses
     print(wlan.ifconfig())
+
+def get_latest_commit(user, token):
+    search_url = "https://api.github.com/search/repositories?q=user:{user}"
+    # search_url = "https://api.github.com/repos/twitter/bootstrap/branches"
+    # headers = {'Authorization': f'token {token}'}
+    headers = {"Authorization":"token {}".format(token),'User-Agent': 'My User Agent 1.0'}
+    response = urequests.get(search_url, headers=headers)
+    search_results = response.json()
+    print(search_results)
+
+    # total_pages = search_results['total_pages']
+
+    # for page in range(1, total_pages + 1):
+    #     search_url = "https://api.github.com/search/repositories?q=user:{user}&page={page}"
+    #     response = urequest.get(search_url, headers=headers)
+    #     print(response.json())
+    #     search_results = response.json()
+
+    #     for item in search_results['items']:
+    #         repo_name = item['name']
+    #         commits_url = "https://api.github.com/repos/{user}/{repo_name}/commits"
+
+    #         # Make a urequest to get the repository commits
+    #         response = urequest.get(commits_url, headers=headers)
+    #         commits = response.json()
+
+    #         # Check if there are any commits in the repository
+    #         if len(commits) > 0:
+    #             latest_commit = commits[0]["sha"]
+    #             print(f"Latest commit in repository {repo_name}: {latest_commit}")
+
+# Replace 'your_username' with the GitHub username you want to retrieve the commits for
+# Replace 'your_token' with your personal access token
+# get_latest_commit('your_username', 'your_token')
+get_latest_commit(config["username"], config["token"])
+ 
 
 do_connect(config["ssid"], config["key"])
 

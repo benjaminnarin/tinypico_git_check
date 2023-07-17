@@ -12,3 +12,12 @@ TinyPICO micropython code that changes LED color if code has been checked in tha
 
  # Config
  Copy config on to device before running running code locally with mpremote
+
+ # urequests install
+ In micropython terminal run:
+
+    1. import upip
+   
+    2. upip.install('micropython-urequests')
+    
+    3. copy urequests.py over to tinypico
