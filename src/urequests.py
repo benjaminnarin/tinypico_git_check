@@ -34,16 +34,16 @@ class Response:
         return str(self.content, self.encoding)
 
     def json(self):
-        import ujson
-        return ujson.loads(self.content)
+        import json
+        return json.loads(self.content)
 
 
 def request(method, url, data=None, json=None, headers={}, auth=None, stream=None, parse_headers=True):
     redir_cnt = 1
     if json is not None:
         assert data is None
-        import ujson
-        data = ujson.dumps(json)
+        import json
+        data = json.dumps(json)
 
     while True:
         try:
@@ -54,7 +54,7 @@ def request(method, url, data=None, json=None, headers={}, auth=None, stream=Non
         if proto == "http:":
             port = 80
         elif proto == "https:":
-            import ussl
+            import ssl
             port = 443
         else:
             raise ValueError("Unsupported protocol: " + proto)
@@ -86,7 +86,7 @@ def request(method, url, data=None, json=None, headers={}, auth=None, stream=Non
             s.connect(ai[-1])
             if proto == "https:":
                 # ctx = ussl.SSLContext()
-                s = ussl.wrap_socket(s, server_hostname=host)
+                s = ssl.wrap_socket(s, server_hostname=host)
             s.write(b"%s /%s HTTP/1.0\r\n" % (method, path))
             if not "Host" in headers:
                 s.write(b"Host: %s\r\n" % host)

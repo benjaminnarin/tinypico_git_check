@@ -54,6 +54,8 @@ def do_connect(ssid: str, key: str):
 
 def get_latest_commit(user, token):
     search_url = "https://api.github.com/search/repositories?q=user:" + user
+    # search_url = "https://api.github.com/repos/twitter/bootstrap/branches"
+    # headers = {'Authorization': f'token {token}'}
     headers = {"Authorization":"token {}".format(token),'User-Agent': 'My User Agent 1.0'}
     response = urequests.get(search_url, headers=headers)
     search_results = response.json()
@@ -83,10 +85,8 @@ def get_latest_commit(user, token):
 # Replace 'your_username' with the GitHub username you want to retrieve the commits for
 # Replace 'your_token' with your personal access token
 # get_latest_commit('your_username', 'your_token')
-get_latest_commit(config["username"], config["token"])
- 
-
 do_connect(config["ssid"], config["key"])
+get_latest_commit(config["username"], config["token"])
 
 # Say hello
 print("\nHello from TinyPICO!")
