@@ -6,6 +6,7 @@ import time, random, micropython
 from network import WLAN, STA_IF, 
 import urequests 
 import json
+import ntptime
 
 def load_config():
 	try:
@@ -37,6 +38,13 @@ TinyPICO.set_dotstar_power( True )
 
 dotstar[0] = ( 150, 0, 150, 0.05)
 
+def get_time():
+    # TODO: Add timezone to config or auto populate using ip address.
+    url = "https://timeapi.io/api/Time/current/zone?timeZone=America/Ensenada"
+    response = urequests.get(url)
+    json_response = response.json()
+    print(json_response)
+
 def do_connect(ssid: str, key: str):
     wlan.active(True) # activate the interface
     if not wlan.isconnected(): # check if the station is connected to an AP
@@ -52,10 +60,45 @@ def do_connect(ssid: str, key: str):
     # get the interface's IP/netmask/gw/DNS addresses
     print(wlan.ifconfig())
 
+# def graph_ql(user, token):
+#     url = "https://api.github.com/graphql"
+#     headers = {
+#         "Authorization":"token {}".format(token),
+#         "Accept":"application/vnd.github.mercy-preview+json",
+#         'User-Agent': 'My User Agent 1.0'
+#     }
+#     query = """
+#         query {
+#         user(login: "USERNAME") {
+#             contributionsCollection {
+#             contributionCalendar {
+#                 totalContributions
+#                 weeks {
+#                 contributionDays {
+#                     date
+#                     contributionCount
+#                   }
+#                 }
+#               }
+#             }
+#           }
+#         }
+#         """
+#     request = urequests.post(url=url,headers=headers,json={'query':query})
+#     json_request = request.json()
+#     data = json_request["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"]
+#     len_data = len(data)
+#     latest_week = json_request["data"]["user"]["contributionsCollection"]["contributionCalendar"]["weeks"][len_data-1]["contributionDays"]
+#     len_latest_week = (len(latest_week)-1)
+#     cur_day = latest_week[len_latest_week]
+
+#     if((cur_day["contributionCount"])):
+#         print(True)
+#     else:
+#         print(False)
+
 def get_latest_commit(user, token):
     search_url = "https://api.github.com/search/repositories?q=user:" + user
-    # search_url = "https://api.github.com/repos/twitter/bootstrap/branches"
-    # headers = {'Authorization': f'token {token}'}
     headers = {"Authorization":"token {}".format(token),'User-Agent': 'My User Agent 1.0'}
     response = urequests.get(search_url, headers=headers)
     search_results = response.json()
@@ -84,11 +127,13 @@ def get_latest_commit(user, token):
 
 # Replace 'your_username' with the GitHub username you want to retrieve the commits for
 # Replace 'your_token' with your personal access token
-# get_latest_commit('your_username', 'your_token')
 do_connect(config["ssid"], config["key"])
-get_latest_commit(config["username"], config["token"])
-
+# get_latest_commit(config["username"], config["token"])
+# graph_ql(config["username"], config["token"])
 # Say hello
+
+get_time()
+
 print("\nHello from TinyPICO!")
 print("--------------------\n")
 
